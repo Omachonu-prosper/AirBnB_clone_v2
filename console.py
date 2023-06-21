@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+import re
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -118,13 +119,44 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+
+        # Parsing the arguements passed to create command
+        args_list = args.split(' ')
+        class_name = args_list[0]
+
+        if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+
+        new_instance = HBNBCommand.classes[class_name]()
+        for i in args_list[1:]:
+            param = i.split('=')
+
+            if len(param) != 2:
+                continue
+            if re.search(r'^".*"$', param[1]):
+                # Parameter is a string
+                # The following line removes the extra double quotes
+                # Its a bit hacky but would do for now
+                param[1] = param[1][1:len(param[1]) - 1]
+                setattr(new_instance, param[0], param[1].replace('_', ' '))
+            elif '.' in param[1]:
+                # Parameter is a float
+                try:
+                    param[1] = float(param[1])
+                    setattr(new_instance, param[0], param[1])
+                except:
+                    pass
+            else:
+                # Parameter is an integer
+                try:
+                    param[1] = int(param[1])
+                    setattr(new_instance, param[0], param[1])
+                except:
+                    pass
+        
         storage.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
