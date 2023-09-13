@@ -9,7 +9,7 @@ sudo mkdir /data/web_static/
 sudo mkdir /data/web_static/releases/
 sudo mkdir /data/web_static/shared/
 sudo mkdir /data/web_static/releases/test/
-sudo chown -R "$USER:$USER" /data/
+sudo chown -R ubuntu:ubuntu /data/
 sudo echo "<html>
   <head>
   </head>
