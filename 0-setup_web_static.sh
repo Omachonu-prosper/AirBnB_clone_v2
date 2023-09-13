@@ -9,8 +9,14 @@ sudo mkdir /data/web_static/
 sudo mkdir /data/web_static/releases/
 sudo mkdir /data/web_static/shared/
 sudo mkdir /data/web_static/releases/test/
-sudo chown -R $USER:$USER /data/
-sudo echo "Initial setup for AirBnB_Clone" > /data/web_static/releases/test/index.html
+sudo chown -R "$USER:$USER" /data/
+sudo echo "<html>
+  <head>
+  </head>
+  <body>
+    Holberton School
+  </body>
+</html>" | sudo tee /data/web_static/releases/test/index.html
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 sudo echo "server {
@@ -24,6 +30,6 @@ sudo echo "server {
     location /hbnb_static {
         alias /data/web_static/current/;
     }
-}" > /etc/nginx/sites-available/default
+}" | sudo tee /etc/nginx/sites-available/default
 
 sudo service nginx restart
