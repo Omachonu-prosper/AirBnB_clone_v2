@@ -13,18 +13,20 @@ def do_pack():
     Pack contents of the web_static directory into .tgz archive
     """
     try:
+        local("mkdir -p versions")
         current_time = datetime.now()
         time_format = current_time.strftime('%Y%m%d%H%M%S')
+        file_path = "versions/web_static_{}.tgz".format(time_format)
         print(
-            "Packing web_static to versions/web_static_{}.tgz".format(
-                time_format
+            "Packing web_static to {}".format(
+                file_path
             )
         )
         local(
-            "tar -cvzf versions/web_static_{}.tgz web_static".format(
-                time_format
+            "tar -cvzf {} web_static".format(
+                file_path
             )
         )
-        return "versions/web_static_{}.tgz".format(time_format)
+        return file_path
     except:
         return None
